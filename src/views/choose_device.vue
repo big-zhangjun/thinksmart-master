@@ -28,6 +28,22 @@
           <h6 v-html="title"></h6>
           <p>Medium Conference Room</p>
         </div>
+        <!-- 左侧操作区 -->
+        <ul class="tab">
+            <li
+              v-for="(item, index) in navList"
+              @click="navIndex=index"
+              :key="index"
+              :class="[{ active: index === navIndex }]"
+            >
+              <img
+                :src="navIndex === index ? item.iconA : item.icon"
+                alt=""
+                srcset=""
+              />
+              <span>{{ item.name }}</span>
+            </li>
+          </ul>
         <div class="roomContent">
           
           <div class="imgBox">
@@ -52,7 +68,7 @@
           </div>
         </div>
       </div>
-      <!-- <div class="device">
+      <div class="device">
         <div class="deviceList">
           <van-radio-group v-model="selectDivice" >
             <ul>
@@ -78,7 +94,7 @@
             {{ step == 4 ? "Complete" : "Next" }}
           </div>
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -89,26 +105,27 @@ export default {
   data() {
     return {
       selectDivice: "",
+      active: 0,
       navList: [
         {
           name: "System",
-          icon: require("../assets/img/nav_icon_01.png"),
-          iconA: require("../assets/img/nav_icon_01_a.png"),
+          icon: require("../assets/img/system_icon_default@2x.png"),
+          iconA: require("../assets/img/system_icon_selected@2x.png"),
         },
         {
           name: "Audio Device",
-          icon: require("../assets/img/nav_icon_02.png"),
-          iconA: require("../assets/img/nav_icon_02_a.png")
+          icon: require("../assets/img/audio_icon_default@2x.png"),
+          iconA: require("../assets/img/audio_icon_selected@2x.png")
         },
         {
           name: "Video Device",
-          icon: require("../assets/img/nav_icon_03.png"),
-          iconA: require("../assets/img/nav_icon_03_a.png")
+          icon: require("../assets/img/video_icon_ default@2x.png"),
+          iconA: require("../assets/img/video_icon_ selected@2x.png")
         },
         {
           name: "Accessories",
-          icon: require("../assets/img/nav_icon_04.png"),
-          iconA: require("../assets/img/nav_icon_04_a.png")
+          icon: require("../assets/img/accessories_icon_default@2x.png"),
+          iconA: require("../assets/img/accessories_icon_selected@2x.png")
         }
       ],
       productList: [
@@ -367,7 +384,7 @@ export default {
   background-color: #f4f4f4;
 }
 .headerContent {
-  width: 1200px;
+  width: 1440px;
   height: 98px;
   margin: 0 auto;
   display: flex;
@@ -381,9 +398,43 @@ export default {
   overflow: hidden;
 }
 .content {
-  width: 1200px;
+  width: 1440px;
   margin: 0 auto;
+  position: relative;
   display:flex;
+  .tab {
+    li {
+      height: 89px;
+      display: flex;
+      align-items: center;
+      width: 270px;
+      cursor: pointer;
+      font-size: 24px;
+      color: #757575;
+      margin-bottom: 16px;
+      img {
+        width: 40px;
+        height: 46px;
+        object-fit: scale-down;
+        margin-right: 20px;
+      }
+    }
+    .active {
+      color: #6173f3;
+      border-radius: 20px;
+      background: #ebebeb;
+      padding-left: 12px;
+      &::before {
+        content:"";
+        display: block;
+        width: 9px;
+        height: 58px;
+        background-color: #6173f3;
+        border-radius: 9px;
+        margin-right: 42px;
+      }
+    }
+  }
 }
 .navContainer {
   display: flex;
@@ -394,29 +445,29 @@ export default {
     background: url("../assets/img/home.png") no-repeat center center/100%;
     cursor: pointer;
   }
-  ul {
-    display: flex;
-  }
-  li {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 36px;
-    padding: 0 23px;
-    border: 1px solid rgb(97, 116, 243);
-    border-radius: 18px;
-    box-sizing: border-box;
-    font-size: 14px;
-    color: #666;
-    margin-left: 18px;
-    cursor: pointer;
-    img {
-      display: block;
-      max-height: 20px;
-      width: auto;
-      margin-right: 9px;
-    }
-  }
+  // ul {
+  //   display: flex;
+  // }
+  // li {
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: center;
+  //   height: 36px;
+  //   padding: 0 23px;
+  //   border: 1px solid rgb(97, 116, 243);
+  //   border-radius: 18px;
+  //   box-sizing: border-box;
+  //   font-size: 14px;
+  //   color: #666;
+  //   margin-left: 18px;
+  //   cursor: pointer;
+  //   img {
+  //     display: block;
+  //     max-height: 20px;
+  //     width: auto;
+  //     margin-right: 9px;
+  //   }
+  // }
   .navActive {
     color: #ffffff;
     background-color: rgb(97, 116, 243);
@@ -424,10 +475,15 @@ export default {
 }
 
 #room {
-  width: 970px;
+  width: 1440px;
+  position: relative;
+  right: 0;
   .roomContent {
     width: 900px;
     margin: 0px auto 0 40px;
+    position: absolute;
+    top: 0;
+    right: 0;
     cursor: pointer;
     display:flex;
     align-items:center;
