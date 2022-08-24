@@ -26,13 +26,13 @@
       <div class="room" id="room">
         <div class="subTitle">
           <h6 v-html="title"></h6>
-          <p>Medium Conference Room</p>
         </div>
         <!-- 左侧操作区 -->
-        <ul class="tab">
+        <div class="left-wrap">
+          <ul class="tab">
             <li
               v-for="(item, index) in navList"
-              @click="navIndex=index"
+              @click="navIndex = index"
               :key="index"
               :class="[{ active: index === navIndex }]"
             >
@@ -44,33 +44,67 @@
               <span>{{ item.name }}</span>
             </li>
           </ul>
+          <div class="device-container">
+            <div class="scroll">
+              <van-radio-group v-model="deviceList[navIndex].value">
+                <ul>
+                  <li
+                    v-for="(item, index) in productList[navIndex]"
+                    :key="index"
+                  >
+                    <van-radio
+                      :name="item.radioValue"
+                      @click="deviceClick"
+                    ></van-radio>
+                    <img :src="item.pic" alt="" srcset="" />
+                    <div class="name">
+                      {{ item.name }}
+                    </div>
+                  </li>
+                </ul>
+              </van-radio-group>
+            </div>
+          </div>
+        </div>
         <div class="roomContent">
-          
           <div class="imgBox">
             <img class="baseImg" src="../assets/img/room.png" />
-            <img :src="item.url" v-for="(item, index) in imageList" :key="index"
-            v-show="step > index"
-            style="pointer-events: none; z-index: 90;"
-            z-index="90"
-            class="devideImg"
+            <img
+              :src="item.url"
+              v-for="(item, index) in imageList"
+              :key="index"
+              v-show="step > index"
+              style="pointer-events: none; z-index: 90"
+              z-index="90"
+              class="devideImg"
             />
-            <div class="pointBox">
-              <div class="point"
+            <div
+              class="pointBox"
+              v-for="(_item, idx) in pointList"
+              :key="_item.value"
+              v-show="navIndex == idx"
+            >
+              <div
+                class="point"
                 v-for="(item, index) in pointList[navIndex]"
                 :key="index"
-                :style="{'left':item.x+ 'rem','top':item.y+ 'rem'}"
-                v-show="item.show && selectDivice != false"
-                @click="clickIcon(index)">
-              <p>{{ item.text }}</p>
-              <img src="../assets/img/ee82e5250f8ed26a7e9f4a94900598a.png" alt="">
-            </div>
+                :style="{ left: item.x + 'rem', top: item.y + 'rem' }"
+                v-show="item.show && deviceList[navIndex].value != false"
+                @click="clickIcon(index)"
+              >
+                <p>{{ item.text }}</p>
+                <img
+                  src="../assets/img/ee82e5250f8ed26a7e9f4a94900598a.png"
+                  alt=""
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="device">
+      <!-- <div class="device">
         <div class="deviceList">
-          <van-radio-group v-model="selectDivice" >
+          <van-radio-group v-model="selectDivice">
             <ul>
               <li v-for="(item, index) in productList[navIndex]" :key="index">
                 <van-radio
@@ -94,7 +128,7 @@
             {{ step == 4 ? "Complete" : "Next" }}
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -109,25 +143,26 @@ export default {
       navList: [
         {
           name: "System",
-          icon: require("../assets/img/system_icon_default@2x.png"),
-          iconA: require("../assets/img/system_icon_selected@2x.png"),
+          icon: require("../assets/img/system_icon_default.svg"),
+          iconA: require("../assets/img/system_icon_selected.svg")
         },
         {
           name: "Audio Device",
-          icon: require("../assets/img/audio_icon_default@2x.png"),
-          iconA: require("../assets/img/audio_icon_selected@2x.png")
+          icon: require("../assets/img/audio_icon_default.svg"),
+          iconA: require("../assets/img/audio_icon_selected.svg")
         },
         {
           name: "Video Device",
-          icon: require("../assets/img/video_icon_ default@2x.png"),
-          iconA: require("../assets/img/video_icon_ selected@2x.png")
+          icon: require("../assets/img/video_icon_ default.svg"),
+          iconA: require("../assets/img/video_icon_ selected.svg")
         },
         {
           name: "Accessories",
-          icon: require("../assets/img/accessories_icon_default@2x.png"),
-          iconA: require("../assets/img/accessories_icon_selected@2x.png")
+          icon: require("../assets/img/accessories_icon_default.svg"),
+          iconA: require("../assets/img/accessories_icon_selected.svg")
         }
       ],
+      deviceList: [{ value: "" }, { value: "" }, { value: "" }, { value: "" }],
       productList: [
         [
           {
@@ -135,18 +170,23 @@ export default {
             radioValue: 1,
             pic: require("../assets/img/12.jpg")
           },
-          // {
-          //   name: "ThinkSmart Mic pod",
-          //   radioValue: 2,
-          //   pic: require("../assets/img/d2_2.png")
-          // }
+          {
+            name: "ThinkSmart Mic pod",
+            radioValue: 2,
+            pic: require("../assets/img/d2_2.png")
+          },
+          {
+            name: "ThinkSmart Mic pod",
+            radioValue: 3,
+            pic: require("../assets/img/d2_2.png")
+          }
         ],
         [
           {
             name: "ThinkSmart Bar XL",
-            radioValue: 1,
+            radioValue: 3,
             pic: require("../assets/img/d2_2.png")
-          },
+          }
           // {
           //   name: "ThinkSmart Mic pod",
           //   radioValue: 2,
@@ -156,15 +196,15 @@ export default {
         [
           {
             name: "ThinkSmart Cam",
-            radioValue: 1,
+            radioValue: 4,
             pic: require("../assets/img/d3.png")
-          },
+          }
           // {
           //   name: "ThinkSmart Hub Gen2",
           //   radioValue: 2,
           //   pic: require("../assets/img/d3_2.png")
           // },
-          
+
           // {
           //   name: "This is device 003",
           //   radioValue: 2,
@@ -182,7 +222,7 @@ export default {
             name: "ThinkSmart Controller",
             radioValue: 1,
             pic: require("../assets/img/d4.png")
-          },
+          }
           // {
           //   name: "ThinkSmart Mic pod",
           //   radioValue: 2,
@@ -198,18 +238,20 @@ export default {
       circleShap3: true,
       imageList: [
         {
-          url:require("../assets/img/system - on the table .png"),
-          id:'core'
+          url: require("../assets/img/system - on the table .png"),
+          id: "core"
         },
         {
-          url:require("../assets/img/Audio device  - below tv.png"),
-          id:'bar'
-        },{
-          url:require("../assets/img/video device  - above tv .png"),
-          id:'camera'
-        },{
-          url:require("../assets/img/accessries - on the table.png"),
-          id:'access'
+          url: require("../assets/img/Audio device  - below tv.png"),
+          id: "bar"
+        },
+        {
+          url: require("../assets/img/video device  - above tv .png"),
+          id: "camera"
+        },
+        {
+          url: require("../assets/img/accessries - on the table.png"),
+          id: "access"
         }
       ],
       step: 0,
@@ -288,10 +330,11 @@ export default {
           }
         ]
       ],
-      main_title: "Choose device for your conference",
+      main_title: "Choose your device.",
       main_title2: "Choose device location",
-      main_title3:'Device installation is complete.<br> Click Next to proceed.',
-      title:''
+      main_title3:
+        "Device installation is complete.<br> Click Next to proceed.",
+      title: ""
     };
   },
   components: {
@@ -303,7 +346,6 @@ export default {
         this.$set(this.pointList[i][j], "show", true);
       }
     }
-
   },
   mounted() {
     this.$nextTick(() => {
@@ -314,6 +356,7 @@ export default {
   methods: {
     initRoom() {},
     next() {
+      console.log(this.go_next);
       if (this.go_next == false) {
         return;
       }
@@ -326,9 +369,9 @@ export default {
       }
     },
     clickIcon(index) {
-      if (this.selectDivice == false) {
-        return;
-      }
+      //   if (this.selectDivice == false) {
+      //     return;
+      //   }
       if (this.pointList[this.navIndex][index].answer == true) {
         this.go_next = true;
         this.step++;
@@ -339,11 +382,10 @@ export default {
         this.title = this.main_title3;
       }
     },
-    deviceClick(){
+    deviceClick() {
       this.title = this.main_title2;
     },
     backStep() {
-      
       if (this.go_next == true) {
         this.step--;
         this.go_next = false;
@@ -356,7 +398,7 @@ export default {
       }
 
       if (this.navIndex == 0) {
-        this.$router.push('/');
+        this.$router.push("/");
         return;
       }
 
@@ -377,7 +419,6 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-
 .container {
   width: 100%;
   margin: 0 auto;
@@ -401,37 +442,83 @@ export default {
   width: 1440px;
   margin: 0 auto;
   position: relative;
-  display:flex;
-  .tab {
-    li {
-      height: 89px;
-      display: flex;
-      align-items: center;
-      width: 270px;
-      cursor: pointer;
-      font-size: 24px;
-      color: #757575;
-      margin-bottom: 16px;
-      img {
-        width: 40px;
-        height: 46px;
-        object-fit: scale-down;
-        margin-right: 20px;
+  display: flex;
+  .left-wrap {
+    display: flex;
+    .tab {
+      width: 280px;
+      li {
+        height: 89px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 24px;
+        color: #757575;
+        margin-bottom: 16px;
+        img {
+          width: 40px;
+          height: 46px;
+          object-fit: scale-down;
+          margin-right: 20px;
+        }
+      }
+      .active {
+        color: #6173f3;
+        border-radius: 20px;
+        background: #ebebeb;
+        padding-left: 12px;
+        &::before {
+          content: "";
+          display: block;
+          width: 9px;
+          height: 58px;
+          background-color: #6173f3;
+          border-radius: 9px;
+          margin-right: 42px;
+        }
       }
     }
-    .active {
-      color: #6173f3;
+    .device-container {
+      width: 270px;
+      height: 500px;
+      margin-top: -23px;
+      background-color: #ebebeb;
       border-radius: 20px;
-      background: #ebebeb;
-      padding-left: 12px;
-      &::before {
-        content:"";
-        display: block;
-        width: 9px;
-        height: 58px;
-        background-color: #6173f3;
-        border-radius: 9px;
-        margin-right: 42px;
+      margin-left: 15px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      padding: 23px 0;
+      .scroll {
+        overflow-y: auto;
+        width: 220px;
+      }
+      li {
+        width: 191px;
+        height: 230px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        padding: 20px;
+        box-sizing: border-box;
+        background: #fff;
+        border: 1px solid #eeeeee;
+        img {
+          display: block;
+          width: 100%;
+          height: 103px;
+          object-fit: scale-down;
+          margin-top: 24px;
+        }
+        .name {
+          letter-spacing: 1px;
+          font-size: 16px;
+          font-weight: 600;
+          color: #666666;
+          margin-top: 16px;
+        }
+      }
+      li:last-child {
+        margin-bottom: 0;
       }
     }
   }
@@ -485,43 +572,43 @@ export default {
     top: 0;
     right: 0;
     cursor: pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    .imgBox{
-      position:relative;
-      .baseImg{
-        height:600px;
-        width:673px;
-        margin:0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .imgBox {
+      position: relative;
+      .baseImg {
+        height: 600px;
+        width: 673px;
+        margin: 0 auto;
       }
-      .devideImg{
-        position:absolute;
-        top:0;
-        left:0;
-        width:673px;
-        height:600px;
+      .devideImg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 673px;
+        height: 600px;
       }
     }
-    .pointBox{
-      position:absolute;
-      top:0;
-      left:0;
-      width:673px;
-      height:600px;
+    .pointBox {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 673px;
+      height: 600px;
     }
-    .point{
+    .point {
       position: absolute;
       z-index: 99;
-      p{
+      p {
         background-color: rgba($color: #ffffff, $alpha: 0.7);
         border-radius: 5px;
         padding: 2px 5px;
       }
-      img{
+      img {
         display: block;
-        width:40px;
-        height:40px;
+        width: 40px;
+        height: 40px;
         margin: 0 auto;
       }
     }
@@ -529,12 +616,11 @@ export default {
 }
 .subTitle {
   text-align: left;
-  margin-top: 12px;
-  margin-bottom:20px;
+  margin-bottom: 72.5px;
+  margin-top: 164px;
   h6 {
     font-size: 30px;
     color: #000000;
-    height:60px;
   }
   p {
     font-size: 14px;
@@ -562,7 +648,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin:0 auto;
+      margin: 0 auto;
       img {
         display: block;
         max-width: 100%;
@@ -570,7 +656,7 @@ export default {
       }
     }
     .name {
-      letter-spacing:1px;
+      letter-spacing: 1px;
       font-size: 16px;
       font-weight: 600;
       color: #666666;
@@ -750,23 +836,20 @@ export default {
 
 @media screen and (min-height: 1000px) {
   .container {
-    height:100%;
-  }
-  
-  .roomContent{
     height: 100%;
-    
-  }
-  .content{
-    height:80vh;
   }
 
+  .roomContent {
+    height: 100%;
+  }
+  .content {
+    height: 80vh;
+  }
 }
 
-@media screen and (max-height:1000px) and (min-height: 800px) {
+@media screen and (max-height: 1000px) and (min-height: 800px) {
   .container {
-    height:100%; 
+    height: 100%;
   }
 }
-
 </style>
