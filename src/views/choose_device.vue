@@ -3,23 +3,7 @@
     <div class="header">
       <div class="headerContent">
         <head_logo></head_logo>
-        <div class="navContainer">
-          <!-- <router-link class="home" tag="div" :to="{ path: '/' }"></router-link> -->
-          <!-- <ul>
-            <li
-              v-for="(item, index) in navList"
-              :key="index"
-              :class="[{ navActive: index === navIndex }]"
-            >
-              <img
-                :src="navIndex === index ? item.iconA : item.icon"
-                alt=""
-                srcset=""
-              />
-              <span>{{ item.name }}</span>
-            </li>
-          </ul> -->
-        </div>
+        <div class="navContainer"></div>
       </div>
     </div>
     <div class="content">
@@ -78,26 +62,20 @@
               z-index="90"
               class="devideImg"
             />
+
             <div
-              class="pointBox"
-              v-for="(_item, idx) in pointList"
-              :key="_item.value"
-              v-show="navIndex == idx"
+              class="point"
+              v-for="(item, _index) in pointList[navIndex]"
+              :key="item.x"
+              :style="{ left: item.x + 'rem', top: item.y + 'rem' }"
+              v-show="item.show && deviceList[navIndex].value != false"
+              @click="clickIcon(_index)"
             >
-              <div
-                class="point"
-                v-for="(item, index) in pointList[navIndex]"
-                :key="index"
-                :style="{ left: item.x + 'rem', top: item.y + 'rem' }"
-                v-show="item.show && deviceList[navIndex].value != false"
-                @click="clickIcon(index)"
-              >
-                <p>{{ item.text }}</p>
-                <img
-                  src="../assets/img/ee82e5250f8ed26a7e9f4a94900598a.png"
-                  alt=""
-                />
-              </div>
+              <p>{{ item.text }}</p>
+              <img
+                src="../assets/img/ee82e5250f8ed26a7e9f4a94900598a.png"
+                alt=""
+              />
             </div>
           </div>
         </div>
